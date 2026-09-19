@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人中心 · 技能互换平台</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="pageTpl" style="display:none">
+    <!-- 个人资料横幅 -->
+    <div class="profile-hero">
+      <span id="heroAvatar"></span>
+      <div>
+        <div class="ph-name" id="heroName"></div>
+        <div class="ph-meta" id="heroMeta"></div>
+        <div class="ph-meta" id="heroBio" style="margin-top:6px"></div>
+      </div>
+      <div class="ph-actions">
+        <button class="btn" onclick="openEditProfile()">✏️ 编辑资料</button>
+      </div>
+    </div>
+
+    <!-- 数据统计 -->
+    <div class="grid grid-4" style="margin-bottom:18px">
+      <div class="stat-card">
+        <div class="stat-ico" style="background:var(--primary-light);color:var(--primary)">📗</div>
+        <div><div class="stat-num" id="cntTeach">0</div><div class="stat-label">我能教的</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico" style="background:var(--warning-light);color:var(--warning)">📙</div>
+        <div><div class="stat-num" id="cntLearn">0</div><div class="stat-label">我想学的</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico" style="background:var(--success-light);color:var(--success)">🤝</div>
+        <div><div class="stat-num" id="cntMatch">0</div><div class="stat-label">匹配伙伴</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico" style="background:#f0ecfa;color:#7a56c0">📨</div>
+        <div><div class="stat-num" id="cntReq">0</div><div class="stat-label">交换请求</div></div>
+      </div>
+    </div>
+
+    <!-- 内容区：Tabs -->
+    <div class="card">
+      <div class="tabs" id="tabs">
+        <div class="tab active" data-tab="mypub">我发布的 <span class="tab-count" id="tabPubCnt">0</span></div>
+        <div class="tab" data-tab="received">收到的请求 <span class="tab-count" id="tabRecvCnt">0</span></div>
+        <div class="tab" data-tab="sent">我发出的 <span class="tab-count" id="tabSentCnt">0</span></div>
+      </div>
+      <div id="tabBody" style="padding:0 18px 18px"></div>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>renderChrome('profile');</script>
+  <script src="js/profile.js"></script>
+</body>
+</html>
