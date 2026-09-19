@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的消息 · 技能互换平台</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="pageTpl" style="display:none">
+    <div class="page-head">
+      <div>
+        <h2>我的消息</h2>
+        <div class="desc">与交换伙伴沟通细节、确认交换时间与方式</div>
+      </div>
+    </div>
+
+    <div class="msg-layout">
+      <!-- 会话列表 -->
+      <div class="conv-list">
+        <div class="conv-list-head">消息列表</div>
+        <div id="convList"></div>
+      </div>
+
+      <!-- 聊天面板 -->
+      <div class="chat" id="chatPanel"></div>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>renderChrome('messages');</script>
+  <script src="js/messages.js"></script>
+</body>
+</html>
