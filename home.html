@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发现技能 · 技能互换平台</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- 页面正文模板（由 common.js 渲染进主框架） -->
+  <div id="pageTpl" style="display:none">
+    <!-- 欢迎横幅 -->
+    <div class="card" style="margin-bottom:18px;background:linear-gradient(110deg,#1c4f9e,#3372c9);border:none;color:#fff">
+      <div style="padding:22px 26px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px">
+          <div style="font-size:18px;font-weight:700;margin-bottom:5px" id="welcomeText">欢迎来到技能广场</div>
+          <div style="font-size:13px;opacity:.85">发现伙伴们分享的技能，也可以发布你的技能，开启第一次互换</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <a class="btn btn-lg" href="publish.html?type=teach" style="background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.4)">📤 我能教的</a>
+          <a class="btn btn-lg" href="publish.html?type=learn" style="background:#fff;color:var(--primary)">📥 我想学的</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 数据概览 -->
+    <div class="grid grid-4" style="margin-bottom:18px">
+      <div class="stat-card">
+        <div class="stat-ico" style="background:var(--primary-light);color:var(--primary)">📚</div>
+        <div><div class="stat-num" id="statTeach">0</div><div class="stat-label">可学习的技能</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico" style="background:var(--warning-light);color:var(--warning)">🎯</div>
+        <div><div class="stat-num" id="statLearn">0</div><div class="stat-label">正在寻找老师</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico" style="background:var(--success-light);color:var(--success)">🤝</div>
+        <div><div class="stat-num" id="statMatch">0</div><div class="stat-label">与你匹配的技能</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-ico" style="background:#f0ecfa;color:#7a56c0">👥</div>
+        <div><div class="stat-num" id="statUser">0</div><div class="stat-label">活跃的交换伙伴</div></div>
+      </div>
+    </div>
+
+    <!-- 筛选条 -->
+    <div class="filter-bar">
+      <div class="filter-row">
+        <span class="filter-label">类型</span>
+        <div class="check-tags" id="typeFilter">
+          <span class="check-tag active" data-type="all">全部</span>
+          <span class="check-tag" data-type="teach">📗 我能教的</span>
+          <span class="check-tag" data-type="learn">📙 我想学的</span>
+        </div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">分类</span>
+        <div class="check-tags" id="catFilter"></div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">搜索</span>
+        <input class="input" id="searchInput" style="max-width:320px;height:32px" placeholder="搜索技能名称 / 标签 / 用户名">
+        <span class="filter-label" style="width:auto;margin-left:10px">方式</span>
+        <div class="check-tags" id="methodFilter">
+          <span class="check-tag active" data-method="all">不限</span>
+          <span class="check-tag" data-method="线上">线上</span>
+          <span class="check-tag" data-method="线下">线下</span>
+        </div>
+        <span style="margin-left:auto;font-size:12.5px;color:var(--text-3)" id="resultCount"></span>
+      </div>
+    </div>
+
+    <!-- 技能卡片列表 -->
+    <div class="skill-grid" id="skillGrid"></div>
+    <div id="emptyBox"></div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>renderChrome('home');</script>
+  <script src="js/home.js"></script>
+</body>
+</html>
