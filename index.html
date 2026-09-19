@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 · 技能互换平台</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="login-page">
+    <!-- 左侧品牌介绍 -->
+    <div class="login-hero">
+      <div class="login-brand">
+        <span class="brand-mark">技</span>
+        <span>技能互换平台</span>
+      </div>
+      <div class="login-hero-body">
+        <h1>用你擅长的，<br>换你想学的</h1>
+        <p>不花一分钱报班，找到和你技能互补的伙伴，互相教学、共同进步。让你的知识与经验，成为最有价值的交换货币。</p>
+        <div class="login-features">
+          <div class="login-feature"><span class="ico">📝</span>发布「我能教的」与「我想学的」</div>
+          <div class="login-feature"><span class="ico">🤝</span>智能匹配技能互补的学习伙伴</div>
+          <div class="login-feature"><span class="ico">💬</span>在线沟通，线上线下自由交换</div>
+        </div>
+      </div>
+      <div class="login-hero-foot">© 2026 技能互换平台 · 原型测试版本</div>
+    </div>
+
+    <!-- 右侧登录表单 -->
+    <div class="login-panel">
+      <div class="login-box">
+        <h2>欢迎回来 👋</h2>
+        <p class="sub">使用手机号 + 验证码登录，新用户将自动注册</p>
+
+        <form id="loginForm" autocomplete="off">
+          <div class="form-item">
+            <label class="form-label">手机号</label>
+            <input class="input" id="phone" type="tel" maxlength="11" placeholder="请输入 11 位手机号">
+            <div class="form-error" id="phoneErr">请输入正确的 11 位手机号</div>
+          </div>
+
+          <div class="form-item">
+            <label class="form-label">短信验证码</label>
+            <div class="input-group">
+              <input class="input" id="smsCode" type="text" maxlength="6" placeholder="6 位验证码">
+              <button type="button" class="btn btn-outline" id="sendCodeBtn" style="width:128px">获取验证码</button>
+            </div>
+            <div class="form-error" id="codeErr">验证码错误，请核对（测试环境见下方提示）</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block">登录 / 注册</button>
+        </form>
+
+        <div class="login-test-tip">
+          🔧 <b>测试提示：</b>本平台为演示原型，不会发送真实短信。点击「获取验证码」后，验证码为 <b>246810</b>（任意符合格式的手机号均可）。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>
+    // 已登录用户直接进入首页
+    if (getUser()) location.href = 'home.html';
+
+    const phoneInput = document.getElementById('phone');
+    const codeInput = document.getElementById('smsCode');
+    const sendBtn = document.getElementById('sendCodeBtn');
+    const form = document.getElementById('loginForm');
+    let codeSent = false;
+
+    // 手机号只允许数字
+    phoneInput.addEventListener('input', () => {
+      phoneInput.value = phoneInput.value.replace(/\D/g, '');
+      document.getElementById('phoneErr').classList.remove('show');
+    });
+    codeInput.addEventListener('input', () => {
+      codeInput.value = codeInput.value.replace(/\D/g, '');
+      document.getElementById('codeErr').classList.remove('show');
+    });
+
+    const phoneValid = () => /^1[3-9]\d{9}$/.test(phoneInput.value);
+
+    // 获取验证码（模拟 60s 倒计时）
+    sendBtn.addEventListener('click', () => {
+      if (!phoneValid()) {
+        document.getElementById('phoneErr').classList.add('show');
+        return;
+      }
+      codeSent = true;
+      toast('验证码已发送（模拟）：246810');
+      let left = 60;
+      sendBtn.disabled = true;
+      sendBtn.textContent = left + 's 后重发';
+      const timer = setInterval(() => {
+        left--;
+        if (left <= 0) {
+          clearInterval(timer);
+          sendBtn.disabled = false;
+          sendBtn.textContent = '重新获取';
+        } else {
+          sendBtn.textContent = left + 's 后重发';
+        }
+      }, 1000);
+    });
+
+    // 登录
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!phoneValid()) { document.getElementById('phoneErr').classList.add('show'); return; }
+      if (!codeSent) { toast('请先获取验证码', 'error'); return; }
+      if (codeInput.value !== MOCK_SMS_CODE) {
+        document.getElementById('codeErr').classList.add('show');
+        return;
+      }
+      loginByPhone(phoneInput.value);
+      toast('登录成功，正在进入平台…', 'success');
+      setTimeout(() => location.href = 'home.html', 500);
+    });
+  </script>
+</body>
+</html>
