@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能匹配 · 技能互换平台</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="pageTpl" style="display:none">
+    <div class="page-head">
+      <div>
+        <h2>智能匹配</h2>
+        <div class="desc">根据你发布的「我想学的」与「我能教的」，自动推荐技能互补的伙伴</div>
+      </div>
+      <a class="btn btn-outline" href="home.html">去广场看看</a>
+    </div>
+
+    <!-- 我的需求概览 -->
+    <div class="card card-pad" style="margin-bottom:18px">
+      <div class="card-title">📋 我的技能名片</div>
+      <div id="myProfile"></div>
+    </div>
+
+    <!-- 匹配结果 -->
+    <div id="matchResult"></div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>renderChrome('matches');</script>
+  <script src="js/matches.js"></script>
+</body>
+</html>
