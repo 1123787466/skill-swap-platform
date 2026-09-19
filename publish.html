@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发布技能 · 技能互换平台</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="pageTpl" style="display:none">
+    <div class="page-head">
+      <div>
+        <h2>发布技能</h2>
+        <div class="desc">清晰地描述你能教什么、想学什么，系统会自动为你匹配合适的伙伴</div>
+      </div>
+    </div>
+
+    <div class="grid grid-main">
+      <!-- 左侧：发布表单 -->
+      <div class="card card-pad">
+        <!-- 类型选择 -->
+        <div class="form-item">
+          <label class="form-label">发布类型<span class="req">*</span></label>
+          <div class="radio-cards" id="typeCards">
+            <label class="radio-card active" data-type="teach">
+              <input type="radio" name="pubType" value="teach" checked>
+              <div class="rc-title">📗 我能教的</div>
+              <div class="rc-desc">分享你擅长的技能，换取你想学的</div>
+            </label>
+            <label class="radio-card" data-type="learn">
+              <input type="radio" name="pubType" value="learn">
+              <div class="rc-title">📙 我想学的</div>
+              <div class="rc-desc">发布学习需求，让会的人找到你</div>
+            </label>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 16px">
+          <div class="form-item">
+            <label class="form-label">技能分类<span class="req">*</span></label>
+            <select class="select" id="fCategory">
+              <option value="">请选择分类</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label class="form-label" id="levelLabel">熟练程度<span class="req">*</span></label>
+            <select class="select" id="fLevel"></select>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label class="form-label" id="titleLabel">技能名称<span class="req">*</span></label>
+          <input class="input" id="fTitle" maxlength="40" placeholder="例：吉他弹唱入门（零基础友好）">
+          <div class="form-hint">一个清晰具体的名称，能让你获得更多匹配</div>
+        </div>
+
+        <div class="form-item">
+          <label class="form-label">技能标签</label>
+          <input class="input" id="fTagInput" maxlength="10" placeholder="输入关键词后回车添加，如：民谣、弹唱">
+          <div class="check-tags" id="tagList" style="margin-top:9px"></div>
+        </div>
+
+        <!-- 仅「我能教的」显示：期望交换 -->
+        <div class="form-item" id="wantSkillsItem">
+          <label class="form-label">希望交换学到的技能</label>
+          <input class="input" id="fWantInput" maxlength="10" placeholder="输入技能后回车添加，如：Python、摄影">
+          <div class="check-tags" id="wantList" style="margin-top:9px"></div>
+          <div class="form-hint">填写后，当对方想学的与你能教的重合时，将被标记为「双向契合」，优先推荐</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 16px">
+          <div class="form-item">
+            <label class="form-label">交换方式<span class="req">*</span></label>
+            <div class="check-tags" id="methodList">
+              <span class="check-tag active" data-method="线上">线上</span>
+              <span class="check-tag" data-method="线下">线下</span>
+              <span class="check-tag" data-method="均可">均可</span>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="form-label">所在城市 / 区域</label>
+            <input class="input" id="fCity" maxlength="20" placeholder="线下交换时填写，例：北京·朝阳区">
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label class="form-label" id="descLabel">详细描述<span class="req">*</span></label>
+          <textarea class="textarea" id="fDesc" maxlength="300" placeholder="介绍一下你的经验 / 教学内容，或你的学习目标、当前基础、可投入的时间…"></textarea>
+          <div class="form-hint"><span id="descCount">0</span>/300</div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:6px">
+          <button class="btn btn-outline" onclick="location.href='home.html'">取消</button>
+          <button class="btn btn-primary" id="submitBtn" style="min-width:130px">确认发布</button>
+        </div>
+      </div>
+
+      <!-- 右侧：提示 -->
+      <div>
+        <div class="card card-pad" style="margin-bottom:16px">
+          <div class="card-title">💡 发布小贴士</div>
+          <ul style="font-size:13px;color:var(--text-2);line-height:2;list-style:none">
+            <li>① 标题写清技能方向和适合人群</li>
+            <li>② 标签越具体，匹配越精准</li>
+            <li>③ 同时发布「能教」和「想学」，更容易获得双向匹配</li>
+            <li>④ 描述中写明可交换时间，提高成功率</li>
+          </ul>
+        </div>
+        <div class="card card-pad">
+          <div class="card-title">📄 我已发布的</div>
+          <div id="myCountTip" style="font-size:13px;color:var(--text-2);line-height:1.9"></div>
+          <a href="profile.html" class="btn btn-outline btn-block btn-sm" style="margin-top:10px">前往个人中心管理</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>renderChrome('publish');</script>
+  <script src="js/publish.js"></script>
+</body>
+</html>
