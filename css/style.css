@@ -518,13 +518,13 @@ ul, ol { list-style: none; }
 .modal-mask {
   position: fixed; inset: 0;
   background: rgba(23, 35, 58, .45);
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 30px;
 }
-.modal-mask.show { display: flex; }
+.modal-mask.hidden { display: none; }
 .modal {
   background: #fff;
   border-radius: 10px;
