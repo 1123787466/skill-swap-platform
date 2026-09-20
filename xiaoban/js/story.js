@@ -23,9 +23,9 @@ function initStory() {
   document.getElementById('listenBtn').addEventListener('click', toggleListen);
 }
 
-/* 提取当日情绪事件与主情绪 */
+/* 提取当日情绪事件与主情绪（只看与当前角色的对话） */
 function extractTodayEvent() {
-  const conv = getConversations();
+  const conv = getConversations(_role.id);
   const todayStart = new Date().setHours(0, 0, 0, 0);
   const childMsgs = conv.filter(c => c.ts >= todayStart && c.role === 'child' && !c.isSensitive);
 
@@ -53,9 +53,9 @@ function buildTodayStory() {
   const child = getChild();
   const { emotion, event } = extractTodayEvent();
 
-  // 复用今天最后一条故事，避免重复生成
+  // 复用今天与当前角色的最后一条故事，避免重复生成（各角色各自独立）
   const todayStart = new Date().setHours(0, 0, 0, 0);
-  const existing = getStories().filter(s => s.ts >= todayStart).pop();
+  const existing = getStories(_role.id).filter(s => s.ts >= todayStart).pop();
   if (existing && existing.emotion === emotion) {
     _currentStory = existing;
     return;
@@ -108,8 +108,10 @@ function toggleListen() {
   _listening = true;
   btn.innerHTML = '<span>⏸️</span> 暂停';
 
-  // 朗读时用更慢的语速
-  const role = Object.assign({}, _role, { voice: { rate: 0.78, pitch: _role.voice.pitch } });
+  // 朗读时保留角色音色（voiceMatch/pitch），只把整体语速放慢
+  const role = Object.assign({}, _role, {
+    voice: Object.assign({}, _role.voice, { rate: 0.78 })
+  });
   const u = speak(_currentStory.content, role);
   if (u) {
     u.onend = () => {

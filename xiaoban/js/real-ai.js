@@ -14,8 +14,9 @@ async function realAIRespond(text, role, settings) {
   const key = settings.aiKey;
   if (!key) throw new Error('missing key');
 
-  // 系统提示词 = 小伴系统约束 + 角色人格
-  const sysContent = SYSTEM_PROMPT + '\n\n' + role.persona;
+  // 系统提示词 = 小伴系统约束 + 角色人格 + 角色语气/口癖要求
+  const sysContent = SYSTEM_PROMPT + '\n\n' + role.persona +
+    (role.llmStyle ? '\n说话风格要求：' + role.llmStyle : '');
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8000); // 8s 超时

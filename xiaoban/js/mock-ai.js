@@ -33,58 +33,52 @@ function detectEmotion(text) {
   return { primary, scores, keywords };
 }
 
-/* ---------- Mock 回复模板 ----------
-   先共情 → 命名情绪 → 温柔引导。每句≤15字，一次≤3句。 */
+/* ---------- 角色化 Mock 回复模板 ----------
+   每个角色 × 每种情绪一组专属话术：
+   先共情 → 命名情绪 → 引导。每句≤15字，一次≤3句。
+   - 小熊暖暖：温柔慢、叠词、抱抱、呀/呢/哦
+   - 恐龙勇勇：短促有力、吼、小勇士、感叹号
+   - 太空奇奇：好奇惊叹、哔/哇/咦、星星飞船比喻 */
 
-// 每种情绪的回复句组（第二句命名情绪，第三句引导）
-const REPLY_TEMPLATES = {
-  happy: [
-    ['{roleName}听到你开心，我也好开心呀！'],
-    ['开心的时候，心里暖暖的对吗？'],
-    ['愿意再跟我说说吗？']
-  ],
-  sad: [
-    ['听起来你有点难过呀。'],
-    ['心里有点委屈，对吗？'],
-    ['{roleName}抱抱你，没关系的。']
-  ],
-  angry: [
-    ['你有点生气呀，没关系的。'],
-    ['生气的时候可以说出来。'],
-    ['是什么让你生气了呢？']
-  ],
-  scared: [
-    ['听起来你有点害怕呀。'],
-    ['害怕时{roleName}陪着你。'],
-    ['愿意告诉我害怕什么吗？']
-  ],
-  calm: [
-    ['嗯嗯，我在听着呢。'],
-    ['今天过得怎么样呀？'],
-    ['想跟我聊点什么吗？']
-  ],
-  neutral: [
-    ['嗯嗯，我在听着呢。'],
-    ['今天过得怎么样呀？'],
-    ['想跟我聊点什么吗？']
-  ]
+const ROLE_REPLIES = {
+  bear: {
+    happy:  ['暖暖也跟着笑啦～', '心里甜甜的对不对？', '来，暖暖抱抱你。'],
+    sad:    ['哎呀，暖暖心都软了。', '心里有点委屈对吗？', '抱抱抱抱，没关系哦。'],
+    angry:  ['呼呼，气鼓鼓的呀。', '生气也没有关系哦。', '要不要跟暖暖说说？'],
+    scared: ['别怕别怕，暖暖在呢。', '心里有点害怕对吗？', '暖暖牵着你的手哦。'],
+    calm:   ['嗯嗯，暖暖听着呢。', '今天过得怎么样呀？', '想聊点什么呢？'],
+    neutral:['嗯嗯，暖暖听着呢。', '今天过得怎么样呀？', '想聊点什么呢？']
+  },
+  dino: {
+    happy:  ['吼！太棒啦！', '勇勇为你骄傲！', '再大声笑一个！'],
+    sad:    ['咦，小勇士别哭！', '难过也没关系的。', '勇勇陪你闯过去！'],
+    angry:  ['吼！气到喷火啦？', '勇敢地说出来！', '勇勇帮你想办法！'],
+    scared: ['别怕！勇勇在！', '小勇士也会害怕。', '深呼吸，我们冲！'],
+    calm:   ['嗯！勇勇听着！', '今天有啥冒险？', '快跟勇勇说说！'],
+    neutral:['嗯！勇勇听着！', '今天有啥冒险？', '快跟勇勇说说！']
+  },
+  space: {
+    happy:  ['哇！像星星一样亮！', '开心得要飞起来啦？', '快告诉奇奇为什么！'],
+    sad:    ['咦……信号有点低落。', '是委屈的小乌云吗？', '奇奇飞来陪你啦。'],
+    angry:  ['哔！能量在冒火？', '生气也可以说哦。', '把它发射到太空吧！'],
+    scared: ['别怕，奇奇开飞船来啦。', '黑黑的像宇宙对吗？', '我们一起照亮它！'],
+    calm:   ['哔，奇奇收到啦。', '今天的星球怎么样？', '有新鲜事告诉我吗？'],
+    neutral:['哔，奇奇收到啦。', '今天的星球怎么样？', '有新鲜事告诉我吗？']
+  }
 };
 
-// 角色昵称映射（让回复更贴合角色）
+// 角色昵称映射（故事生成用）
 function roleNick(role) {
   return { bear: '暖暖', dino: '勇勇', space: '奇奇' }[role.id] || role.name;
 }
 
-// 生成 Mock 回复（字符串，换行分隔，≤3句）
+// 生成 Mock 回复（字符串，换行分隔，≤3句；不同角色措辞完全不同）
 function mockReply(text, emotion, role) {
-  const emo = (emotion && REPLY_TEMPLATES[emotion]) ? emotion : 'neutral';
-  const nick = roleNick(role);
-  const sets = REPLY_TEMPLATES[emo];
-  // 取前 3 句，注入角色昵称
-  const sentences = sets.map(arr => arr[0].replace(/\{roleName\}/g, nick).replace(/\{roleName\}/g, nick));
-  // 保证每句不超过 15 字（超长截断加省略号；正常模板都达标）
-  const clipped = sentences.map(s => s.length > 15 ? s.slice(0, 14) + '…' : s);
-  return clipped.join('\n');
+  const r = role || getCurrentRole();
+  const bank = ROLE_REPLIES[r.id] || ROLE_REPLIES.bear;
+  const emo = (emotion && bank[emotion]) ? emotion : 'neutral';
+  // 取前 3 句；保险起见超长截断加省略号（模板本身都 ≤15 字）
+  return bank[emo].slice(0, 3).map(s => s.length > 15 ? s.slice(0, 14) + '…' : s).join('\n');
 }
 
 /* ---------- 统一回复入口 ----------
@@ -136,34 +130,51 @@ async function respond(text, role) {
   return { reply, emotion, isSensitive: false, keywords: emo.keywords, latencyMs };
 }
 
-/* ---------- 故事生成（阶段3详化，此处先给基础版） ----------
-   孩子是主角，把情绪事件编进 300 字内小故事。 */
+/* ---------- 角色化故事生成 ----------
+   孩子是主角，把当天情绪事件编进 300 字内小故事。
+   三个角色各有专属意象与叙事口吻：
+   - 小熊暖暖：抱抱、蜂蜜、小毯子、树洞，温柔安抚
+   - 恐龙勇勇：丛林、大山、勋章、吼，鼓励冒险
+   - 太空奇奇：星星、飞船、月亮、信号，惊叹想象 */
 function generateStory(childName, emotion, event, role) {
   const name = childName || getChild().nickname || '小宝贝';
   const r = role || getCurrentRole();
-  const nick = roleNick(r);
   const evt = event || '今天发生的一件小事';
 
-  // 按情绪选故事骨架
-  const SKELETONS = {
-    happy: `${name}今天${evt}。\n\n${nick}说："${name}，你笑起来真好看！"\n${name}开心地蹦了起来。\n\n天上的星星也跟着眨眨眼。\n${name}抱着${nick}说："明天我还要更开心！"`,
-    sad: `${name}今天${evt}，心里有点难过。\n\n${nick}轻轻走到${name}身边。\n"${name}，没关系的，我陪着你呀。"\n\n${name}的眼泪慢慢停了。\n${nick}说："难过的时候抱抱，就会好一点哦。"`,
-    angry: `${name}今天${evt}，有点生气。\n\n${nick}说："${name}，生气的时候可以深呼吸。"\n${name}吸了一大口气，又慢慢吐出来。\n\n"是不是好一点点了？"\n${name}点点头，气也飞走了。`,
-    scared: `${name}今天${evt}，有点害怕。\n\n${nick}牵着${name}的手。\n"${name}，害怕的时候我在你身边。"\n\n灯亮起来了，原来什么可怕的东西都没有。\n${name}抱住${nick}，再也不怕了。`,
-    calm: `${name}今天${evt}。\n\n${nick}和${name}一起看天上的云。\n一朵云像小熊，一朵云像小船。\n\n"${name}，你心里现在是什么颜色呀？"\n${name}想了想，说："是暖暖的黄色。"`,
-    neutral: `${name}今天${evt}。\n\n${nick}和${name}一起看天上的云。\n一朵云像小熊，一朵云像小船。\n\n"${name}，你心里现在是什么颜色呀？"\n${name}想了想，说："是暖暖的黄色。"`
+  const ROLE_STORY_SKELETONS = {
+    bear: {
+      happy: `${name}今天${evt}，笑得像蜂蜜一样甜。\n\n暖暖抱着${name}转了个圈：\n"你笑起来，整个树洞都暖啦！"\n\n晚上，暖暖把${name}裹进小毯子：\n"做个甜甜的梦哦，明天还要开心！"`,
+      sad: `${name}今天${evt}，眼眶红红的。\n\n暖暖什么也没说，先给了一个大大的抱抱。\n"委屈的时候，抱抱最管用啦。"\n\n${name}在暖暖怀里慢慢不哭了。\n"谢谢你，暖暖。" "我一直都在呀。"`,
+      angry: `${name}今天${evt}，气得小拳头攥得紧紧的。\n\n暖暖轻轻握住${name}的手：\n"来，跟暖暖一起深呼吸——"\n\n吸一口蜂蜜味的空气，再慢慢吐掉。\n"哇，气气都被呼走啦！" ${name}笑了。`,
+      scared: `${name}今天${evt}，不敢一个人睡。\n\n暖暖钻进被窝，把${name}搂得紧紧的。\n"害怕的时候，就想想暖暖在抱抱你。"\n\n被窝里暖暖的、软软的。\n${name}听着暖暖的心跳，慢慢睡着了。`,
+      calm: `${name}今天${evt}，心里平平的、静静的。\n\n暖暖和${name}靠在窗边看云。\n"你看，那朵云像不像一个大抱抱？"\n\n${name}点点头，靠在暖暖身上。\n"这样的下午，也很好呀。"`
+    },
+    dino: {
+      happy: `${name}今天${evt}，开心得蹦得比树还高！\n\n勇勇"吼"了一声：\n"这是今天最棒的冒险！"\n\n勇勇把一枚树叶勋章别在${name}胸前：\n"奖励最开心的小勇士！"\n${name}挺着小胸脯，明天还要再冒险！`,
+      sad: `${name}今天${evt}，低下了头。\n\n勇勇蹲下来，轻轻碰了碰${name}：\n"小勇士也可以哭一下下。"\n\n"哭完了，我们继续往前冲！"\n${name}抹抹眼泪，重新站直了。\n"对，勇勇，我能行！"`,
+      angry: `${name}今天${evt}，气得直跺脚。\n\n勇勇说："来，跟我一起吼——吼！"\n${name}也大声吼了一下。\n\n"是不是把坏脾气吓跑啦？"\n${name}噗嗤笑了："吓跑啦！"\n"好！那我们继续冒险！"`,
+      scared: `${name}今天${evt}，腿有点发软。\n\n勇勇挡在${name}前面：\n"别怕，勇勇在前面开路！"\n\n它们一起走过黑黑的小路。\n原来什么可怕的东西都没有。\n"看，你自己走完啦，真勇敢！"`,
+      calm: `${name}今天${evt}，像平静的小湖面。\n\n勇勇说："休息也是一种冒险！"\n\n它们坐在大石头上晒太阳。\n"勇勇，我明天想去爬那座山。"\n"好！养足精神，明天冲！"`
+    },
+    space: {
+      happy: `${name}今天${evt}，快乐信号超强！\n\n奇奇从飞船里探出头：\n"哔！检测到一颗会笑的小星星！"\n\n那颗星星就是${name}呀。\n奇奇把最亮的星光送给${name}：\n"把开心存起来，晚上照着你！"`,
+      sad: `${name}今天${evt}，信号有点低落。\n\n奇奇开着小飞飞船过来：\n"咦，小乌云也来太空旅行吗？"\n\n"来，把难过装进我的飞船。"\n奇奇"嗖"地把它送到月亮后面。\n"好啦，心里又亮啦。"`,
+      angry: `${name}今天${evt}，能量在冒火星。\n\n奇奇说："一二三，发射！"\n${name}把生气包成一个小球球。\n\n小球球飞过月亮，越飞越远。\n"哔——坏情绪已送出太阳系！"\n${name}笑了："哇，真的飞走了！"`,
+      scared: `${name}今天${evt}，周围黑黑的。\n\n奇奇开飞船亮起两盏小星星灯：\n"看，宇宙再黑，也有星星点灯。"\n\n它们数着一颗、两颗、三颗……\n黑黑的天空变成了星空。\n${name}抱着星星灯，不怕啦。`,
+      calm: `${name}今天${evt}，信号平平的、稳稳的。\n\n奇奇和${name}飘在太空里看地球。\n"你看，地球蓝蓝的，多安静呀。"\n\n${name}打了个小哈欠。\n"奇奇，我想睡了。" "晚安，小星星。"`
+    }
   };
 
-  const content = SKELETONS[emotion] || SKELETONS.neutral;
+  const bank = ROLE_STORY_SKELETONS[r.id] || ROLE_STORY_SKELETONS.bear;
+  const content = bank[emotion] || bank.calm;
+
   const titles = {
-    happy: `${name}和${nick}的快乐一天`,
-    sad: `${name}被${nick}抱抱了`,
-    angry: `${name}的生气飞走了`,
-    scared: `${name}不再害怕了`,
-    calm: `${name}和${nick}看云朵`,
-    neutral: `${name}和${nick}看云朵`
+    bear:  { happy: `${name}的蜂蜜味开心`, sad: `${name}的大大抱抱`, angry: `${name}把气气呼走啦`, scared: `${name}的暖暖被窝`, calm: `${name}和暖暖的云下午` },
+    dino:  { happy: `${name}的开心勋章`, sad: `${name}哭完继续冲`, angry: `${name}吼走坏脾气`, scared: `${name}自己走完了黑路`, calm: `${name}的山顶冒险计划` },
+    space: { happy: `${name}是会笑的小星星`, sad: `${name}的小乌云旅行`, angry: `${name}发射了坏情绪`, scared: `${name}的星星点灯`, calm: `${name}和奇奇看地球` }
   };
-  return { title: titles[emotion] || titles.neutral, content };
+  const titleBank = titles[r.id] || titles.bear;
+  return { title: titleBank[emotion] || titleBank.calm, content };
 }
 
 /* ---------- 家长报告聚合（阶段4使用） ---------- */

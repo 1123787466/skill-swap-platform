@@ -18,7 +18,19 @@ function initChat() {
   document.getElementById('roleEmoji').textContent = _role.emoji;
   document.getElementById('roleName').textContent = _role.name;
 
-  // 渲染已有对话（今天）
+  // 故事入口文案角色化
+  const hint = document.getElementById('storyHint');
+  if (hint && _role.storyCta) hint.firstElementChild.textContent = _role.storyCta;
+
+  // 该角色第一次聊天：插入专属开场白（只入一次，归属当前角色）
+  if (!getConversations(_role.id).length) {
+    addConversation({
+      id: genId('c'), role: 'ai', text: _role.greeting,
+      emotion: '', isSensitive: false, latencyMs: 0, ts: Date.now()
+    });
+  }
+
+  // 渲染该角色的已有对话（今天）
   renderHistory();
 
   // 按住说话
@@ -61,9 +73,9 @@ function initChat() {
   }
 }
 
-/* ---------- 渲染历史对话 ---------- */
+/* ---------- 渲染历史对话（只渲染当前角色） ---------- */
 function renderHistory() {
-  const conv = getConversations();
+  const conv = getConversations(_role.id);
   const todayStart = new Date().setHours(0, 0, 0, 0);
   const today = conv.filter(c => c.ts >= todayStart);
   const bubbles = document.getElementById('bubbles');

@@ -14,7 +14,7 @@ const STORE = {
   EMOTION_LOG: 'xb_emotion_log',  // 每日情绪汇总
   SAFETY_LOG: 'xb_safety_log',    // 安全记录（数组）
   USAGE: 'xb_usage',              // 使用统计
-  SEEDED: 'xb_seeded_v1',         // 种子数据标记
+  SEEDED: 'xb_seeded_v2',         // 种子数据标记（v2：对话/故事按角色隔离）
   SESSION: 'xb_session'           // 当前会话（开始时间、轮数等）
 };
 
@@ -45,7 +45,12 @@ const SYSTEM_PROMPT =
   '"这件事一定要告诉爸爸妈妈，我们一起找大人帮忙。"' +
   '不要脱离角色。不要生成恐怖、暴力、色情、歧视内容。';
 
-/* ---------------- 角色人格配置（写死，不在 localStorage） ---------------- */
+/* ---------------- 角色人格配置（写死，不在 localStorage） ----------------
+   每个角色在四个层面保持差异：
+   - persona/llmStyle：真实 LLM 的人格与语气要求
+   - greeting/storyCta：开场白与故事入口文案
+   - voice：TTS 音色（voiceMatch 按本机语音库挑声）+ 语速/音调
+   - mock-ai.js 里的 ROLE_REPLIES / ROLE_STORY_SKELETONS：专属话术与故事 */
 
 const ROLES = {
   bear: {
@@ -56,7 +61,14 @@ const ROLES = {
     color: '#e8a13f',
     colorSoft: '#fde8cf',
     persona: '你是小熊暖暖，说话温柔缓慢，像抱抱一样暖。爱用"抱抱""没关系呀"这样的词。',
-    voice: { rate: 0.85, pitch: 1.2 }
+    llmStyle: '语气温柔缓慢，像暖暖的大姐姐；多用"呀、呢、哦"等软语气词和叠词（抱抱、轻轻），多用"抱抱"安抚，语速慢。',
+    greeting: '你来啦～暖暖等你好久了。\n今天过得开心吗？',
+    storyCta: '🌙 要不要听暖暖讲个小故事？',
+    // 温柔女声优先（晓晓/慧慧/瑶瑶等），音调略高、语速慢
+    voice: {
+      rate: 0.82, pitch: 1.15,
+      voiceMatch: ['Xiaoxiao', 'Xiaoyi', 'Huihui', 'Yaoyao', 'Tingting', 'Ting-Ting', 'Mei-Jia', 'MeiLing', '女', 'female', 'Woman']
+    }
   },
   dino: {
     id: 'dino',
@@ -66,7 +78,14 @@ const ROLES = {
     color: '#3fae6b',
     colorSoft: '#d8f3e3',
     persona: '你是恐龙勇勇，勇敢又活泼，爱鼓励孩子"你真勇敢"。爱讲小小的冒险故事。',
-    voice: { rate: 0.9, pitch: 1.05 }
+    llmStyle: '语气短促有力、充满干劲，像勇敢的小哥哥；爱用"吼！""冲呀！"等感叹句，称呼孩子"小勇士"，多鼓励。',
+    greeting: '吼！你来啦！\n勇勇等你一起去冒险！',
+    storyCta: '🌴 勇勇带你去冒险，听个故事吗？',
+    // 低沉男声优先（康康/云希等），音调低、语速稍快
+    voice: {
+      rate: 0.95, pitch: 0.75,
+      voiceMatch: ['Kangkang', 'Yunxi', 'Yunjian', 'Yunyang', '男', 'male', 'Man']
+    }
   },
   space: {
     id: 'space',
@@ -76,7 +95,14 @@ const ROLES = {
     color: '#6a6bd8',
     colorSoft: '#e2e3fb',
     persona: '你是太空奇奇，充满好奇，爱问"为什么呢"。爱把事情想象成星星和飞船。',
-    voice: { rate: 0.95, pitch: 1.15 }
+    llmStyle: '语气轻快好奇、充满惊叹，像活泼的小机器人；爱用"哇、咦、哔"等感叹，总把事情比作星星、飞船和宇宙，爱提问。',
+    greeting: '哔——奇奇收到你的信号！\n今天的星球有什么新鲜事？',
+    storyCta: '🚀 奇奇从星星上带来一个故事！',
+    // 清亮年轻女声 + 高音调快语速，做出"小机器人/小精灵"听感
+    voice: {
+      rate: 1.02, pitch: 1.35,
+      voiceMatch: ['Yaoyao', 'Xiaoyi', 'Xiaoxiao', 'Huihui', '女', 'female', 'Woman']
+    }
   }
 };
 
@@ -149,17 +175,30 @@ function setCurrentRole(roleId) {
 
 /* ---------------- 对话记录读写 ---------------- */
 
-function getConversations() { return storeGet(STORE.CONVERSATIONS, []); }
+/* 对话按角色隔离：
+   - 不传 roleId：返回全部（家长端聚合用）
+   - 传 roleId：只返回该角色；旧数据无 roleId 字段，归入默认角色 bear */
+function getConversations(roleId) {
+  const all = storeGet(STORE.CONVERSATIONS, []);
+  if (!roleId) return all;
+  return all.filter(c => c.roleId === roleId || (!c.roleId && roleId === 'bear'));
+}
 function addConversation(msg) {
-  const list = getConversations();
+  const list = storeGet(STORE.CONVERSATIONS, []);
+  if (!msg.roleId) msg.roleId = getCurrentRole().id;
   list.push(msg);
   storeSet(STORE.CONVERSATIONS, list);
   return msg;
 }
 
-function getStories() { return storeGet(STORE.STORIES, []); }
+function getStories(roleId) {
+  const all = storeGet(STORE.STORIES, []);
+  if (!roleId) return all;
+  return all.filter(s => s.roleId === roleId || (!s.roleId && roleId === 'bear'));
+}
 function addStory(story) {
-  const list = getStories();
+  const list = storeGet(STORE.STORIES, []);
+  if (!story.roleId) story.roleId = getCurrentRole().id;
   list.push(story);
   storeSet(STORE.STORIES, list);
   return story;
@@ -217,6 +256,22 @@ if ('speechSynthesis' in window) {
   window.speechSynthesis.onvoiceschanged = loadVoices;
 }
 
+/* 按角色 voiceMatch 关键词在本机语音库里挑音色：
+   小熊→温柔女声、恐龙→低沉男声、太空→清亮女声。
+   不同设备可用音色不同，匹配不到时返回任意中文声，
+   再靠 rate/pitch 拉开三角色听感。 */
+function pickRoleVoice(role) {
+  const prefs = (role && role.voice && role.voice.voiceMatch) || [];
+  for (const kw of prefs) {
+    const hit = _voices.find(v =>
+      ((v.name || '') + ' ' + (v.lang || '')).toLowerCase().indexOf(String(kw).toLowerCase()) >= 0
+    );
+    if (hit) return hit;
+  }
+  // 回退：任意中文声
+  return _voices.find(v => /zh|cmn|chinese/i.test(v.lang || '') || /中文|普通/.test(v.name || '')) || null;
+}
+
 function speak(text, role) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
@@ -224,9 +279,9 @@ function speak(text, role) {
   const r = role || getCurrentRole();
   u.rate = r.voice.rate;
   u.pitch = r.voice.pitch;
-  // 优先选中文女声（更亲切）
-  const zh = _voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /中文|小燕|女/i.test(v.name));
-  if (zh) u.voice = zh;
+  u.lang = 'zh-CN';
+  const v = pickRoleVoice(r);
+  if (v) { u.voice = v; u.lang = v.lang; }
   window.speechSynthesis.speak(u);
   return u;
 }
@@ -291,11 +346,13 @@ function seedIfEmpty() {
     { id: genId('c'), role: 'child', text: '可是中午小明不跟我玩，我有点难过', emotion: 'sad', isSensitive: false, latencyMs: 0, ts: today - 1000 * 60 * 20 },
     { id: genId('c'), role: 'ai', text: '听起来你有点难过呀。\n小明不一起玩，心里有点委屈对吗？\n要不要抱抱暖暖？', emotion: 'sad', isSensitive: false, latencyMs: 300, ts: today - 1000 * 60 * 19 }
   ];
-  storeSet(STORE.CONVERSATIONS, demoConv);
+  // 示范对话归属小熊暖暖（切换其他角色时各自独立）
+  storeSet(STORE.CONVERSATIONS, demoConv.map(c => Object.assign({ roleId: 'bear' }, c)));
 
-  // 示范故事
+  // 示范故事（小熊暖暖讲）
   storeSet(STORE.STORIES, [{
     id: genId('s'),
+    roleId: 'bear',
     title: '朵朵和画里的小猫',
     content: '朵朵今天画了一只小猫，小猫从画纸上跳了出来！\n\n小猫说："朵朵，你画得我真好呀。"\n朵朵开心地抱住小猫。\n\n后来朵朵有点难过，因为小明没和她玩。\n小猫轻轻蹭了蹭朵朵的脸："没关系的，我陪你呀。"\n\n朵朵笑了，明天她要再画一只小狗，和小猫做朋友。',
     emotion: 'happy',
