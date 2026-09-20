@@ -141,6 +141,13 @@
   .shot-card figcaption{font-size:12px;color:var(--ink-soft);text-align:center;padding:8px;background:var(--bg)}
   .link-btn{margin-top:24px}
   /* 项目配色 */
+  .p-swap .p-num{background:linear-gradient(135deg,#a08bff,#7c5cf0)}
+  .p-swap .pain{background:#f1efff}
+  .p-swap .p-tag{background:#f1efff;color:#6a4de0}
+  .p-swap .metric{background:#f1efff}
+  .p-swap .metric b{color:#7c5cf0}
+  .insight{margin:0 0 26px;border-radius:16px;padding:18px 22px;font-size:15px;background:var(--mint)}
+  .insight b{display:block;margin-bottom:4px;font-size:15px}
   .p-wear .p-num{background:linear-gradient(135deg,#ffb199,#ff8a7a)}
   .p-wear .pain{background:var(--pink-bg)}
   .p-wear .p-tag{background:var(--pink-bg);color:#e0644f}
@@ -184,6 +191,7 @@
     <a class="logo" href="#top"><span class="logo-dot">琦</span>王佳琦 · 作品集</a>
     <nav class="nav-links" aria-label="站内导航">
       <a href="#about">关于我</a>
+      <a href="#project-swap">技能互换平台</a>
       <a href="#project-wear">今天穿什么</a>
       <a href="#project-meet">会议纪要助手</a>
       <a href="#project-data">数据分析助手</a>
@@ -213,7 +221,7 @@
       <a class="btn btn-ghost" href="https://1123787466.github.io/today-wear-web" target="_blank" rel="noopener">「今天穿什么」在线演示 ↗</a>
     </div>
     <div class="hero-stats">
-      <div class="stat"><b>3</b><span>完整产品项目</span></div>
+      <div class="stat"><b>4</b><span>完整产品项目</span></div>
       <div class="stat"><b>2</b><span>自制 AI 智能体</span></div>
       <div class="stat"><b>92%</b><span>待办识别准确率</span></div>
       <div class="stat"><b>🏆</b><span>国家级奖项</span></div>
@@ -251,17 +259,90 @@
   </div>
 </section>
 
+<!-- 项目 0：技能互换平台 -->
+<section id="project-swap" style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">PROJECT 01</span>
+      <h2>技能互换平台</h2>
+      <p>产品经理项目 · 双向发布的技能交换社区</p>
+    </div>
+    <div class="project p-swap reveal">
+      <div class="p-head">
+        <div class="p-num">01</div>
+        <div class="p-title">
+          <h3>双向发布 + 智能匹配 + 消息撮合</h3>
+          <div class="sub">0→1 独立完成 · 已部署 GitHub Pages 公网上线</div>
+        </div>
+        <div class="p-tags">
+          <span class="p-tag">产品经理项目</span>
+          <span class="p-tag">匹配算法</span>
+          <span class="p-tag">Web 原型</span>
+        </div>
+      </div>
+      <div class="pain">
+        <b>🎯 项目背景</b>
+        技能学习市场长期存在供需错配：C 端用户学习新技能面临"报班贵（数千元起）、自学难坚持（完课率不足 15%）、缺乏反馈"三大痛点；同时大量有一技之长的普通人缺少低门槛的分享与变现渠道。传统知识付费平台以单向内容交付为主，未解决"学完无处练、会教无人约"的闭环缺口。
+      </div>
+      <div class="insight">
+        <b>💡 用户洞察</b>
+        技能学习者真正的阻碍不是"找不到内容"，而是"缺少低成本、强约束、有反馈的学习伙伴"。每个学习者同时也是一个潜在的教学者——学吉他的可能擅长 Python，学摄影的可能懂英语。将"我想学的"与"我能教的"在同一用户身上双向撮合，用零金钱成本的身份互换替代付费报班，天然形成学习契约与社交约束，解决坚持难的问题。
+      </div>
+      <div class="feat-grid">
+        <div class="feat">
+          <div class="shot"><img src="assets/swap-login.png" alt="登录注册页：手机号加验证码登录，新用户自动注册"></div>
+          <div class="txt"><b>🔐 登录注册</b><p>手机号 + 验证码登录，新用户自动注册，即开即用</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/swap-publish.png" alt="双向发布页：我能教的与我想学的两种发布类型、技能分类与熟练度"></div>
+          <div class="txt"><b>📤 双向需求发布</b><p>分别发布"我能教的"（熟练度、标签、期望换到的技能）与"我想学的"（当前水平、目标），形成个人技能名片</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/swap-home.png" alt="技能广场：发现技能、多维筛选与技能卡片列表"></div>
+          <div class="txt"><b>🧭 发现与撮合</b><p>技能广场支持类型/分类/方式/关键词多维筛选，技能详情卡片展示对方"想换的技能"，提升双向转化</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/swap-matches.png" alt="智能匹配页：我的技能名片与匹配推荐"></div>
+          <div class="txt"><b>🧠 智能匹配引擎</b><p>加权算法：分类命中 50%、技能标签/关键词重合 30%、双向契合度 25%、交换方式兼容 5%，输出匹配评分与契合理由，双向契合者优先推荐</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/swap-messages.png" alt="消息页：结构化交换请求会话与模拟聊天"></div>
+          <div class="txt"><b>💬 消息与交换闭环</b><p>发起交换即生成结构化交换请求会话，支持附言沟通与模拟聊天，形成"发现-匹配-沟通-交换"完整链路</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/swap-profile.png" alt="个人中心：资料管理、发布的技能与交换请求管理"></div>
+          <div class="txt"><b>👤 个人中心</b><p>资料管理、我发布的技能、收到的/发出的交换请求三 Tab 管理，数据看板呈现匹配与请求概览</p></div>
+        </div>
+      </div>
+      <div class="metric-row">
+        <div class="metric"><b>0→1</b><span>独立完成 6 个核心页面</span></div>
+        <div class="metric"><b>85+ 分</b><span>双向场景高匹配推荐</span></div>
+        <div class="metric"><b>8 · 14</b><span>预置 8 位用户 / 14 条技能</span></div>
+        <div class="metric"><b>100%</b><span>全流程测试用例通过</span></div>
+      </div>
+      <ul class="result-list">
+        <li>0→1 完成产品落地：6 个核心页面（登录、发现、发布、匹配、消息、个人中心）+ 8 类技能分类 + 双向匹配算法设计，产出可交互高保真原型</li>
+        <li>公网上线可访问：部署至 GitHub Pages，任何人可通过链接直接访问使用，完成端到端闭环验证</li>
+        <li>闭环验证通过：覆盖"注册登录→发布教/学需求→智能匹配→发起交换→消息沟通→对方回复"全流程；针对"发起交换弹窗不可见"的静默缺陷完成定位与修复并重新上线</li>
+      </ul>
+      <div class="link-btn">
+        <a class="btn btn-primary" href="https://1123787466.github.io/skill-swap-platform/home.html" target="_blank" rel="noopener">在线访问 ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 项目 1：今天穿什么 -->
 <section id="project-wear" style="padding-top:24px">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="sec-tag">PROJECT 01</span>
+      <span class="sec-tag">PROJECT 02</span>
       <h2>「今天穿什么」</h2>
       <p>游戏化衣柜记录 + 穿搭社区设计</p>
     </div>
     <div class="project p-wear reveal">
       <div class="p-head">
-        <div class="p-num">01</div>
+        <div class="p-num">02</div>
         <div class="p-title">
           <h3>衣柜管理 + 天气推荐 + 宠物陪伴 + 社区互动</h3>
           <div class="sub">帮用户 "记得住、找得到、穿得对"</div>
@@ -325,13 +406,13 @@
 <section id="project-meet" style="padding-top:24px">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="sec-tag">PROJECT 02</span>
+      <span class="sec-tag">PROJECT 03</span>
       <h2>会议纪要助手</h2>
       <p>语音转文字 + 智能分发 + 邮件推送智能体</p>
     </div>
     <div class="project p-meet reveal">
       <div class="p-head">
-        <div class="p-num">02</div>
+        <div class="p-num">03</div>
         <div class="p-title">
           <h3>一键上传录音，纪要自动送达各部门</h3>
           <div class="sub">自制工作流 · 从录音到分发的全自动闭环</div>
@@ -376,13 +457,13 @@
 <section id="project-data" style="padding-top:24px">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="sec-tag">PROJECT 03</span>
+      <span class="sec-tag">PROJECT 04</span>
       <h2>数据分析助手</h2>
       <p>自动化数据洞察与可视化报告生成智能体</p>
     </div>
     <div class="project p-data reveal">
       <div class="p-head">
-        <div class="p-num">03</div>
+        <div class="p-num">04</div>
         <div class="p-title">
           <h3>上传表格，对话间生成可视化报告</h3>
           <div class="sub">对话式数据分析 AI · 可分享的网页报告</div>
@@ -428,7 +509,7 @@
 <section id="aigc" style="padding-top:24px">
   <div class="wrap">
     <div class="sec-head reveal">
-      <span class="sec-tag">PROJECT 04</span>
+      <span class="sec-tag">PROJECT 05</span>
       <h2>AIGC 儿歌视频</h2>
       <p>用 AI 生产的英语启蒙儿歌动画</p>
     </div>
