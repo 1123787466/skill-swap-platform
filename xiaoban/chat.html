@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>小伴同学 · 聊天</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/child.css">
+</head>
+<body>
+  <div class="wrap">
+    <!-- 顶部：角色 + 剩余时长（阶段4接入倒计时） -->
+    <div class="chat-head">
+      <div class="avatar" id="roleEmoji">🐻</div>
+      <div class="info">
+        <div class="name" id="roleName">小熊暖暖</div>
+        <div class="timer" id="timer">剩余 15:00</div>
+      </div>
+      <a class="link" href="index.html" style="font-size:13px;padding:8px 14px;border-radius:999px;background:var(--card);box-shadow:var(--shadow)">换伙伴</a>
+    </div>
+
+    <!-- 对话气泡区（阶段2实现） -->
+    <div class="chat-body">
+      <div class="bubbles" id="bubbles"></div>
+    </div>
+
+    <!-- 故事提示（阶段3接入） -->
+    <div class="story-hint" id="storyHint" style="display:none">
+      <span>🌙 要不要听一个关于你的小故事？</span>
+      <span class="arr">→</span>
+    </div>
+
+    <!-- 输入区（阶段2实现按住说话 + 文字兜底） -->
+    <div class="chat-foot">
+      <div class="input-area">
+        <button class="hold-btn" id="holdBtn">
+          <span class="ico">🎤</span>
+          <span>按住说话</span>
+        </button>
+        <button class="text-toggle" id="textToggle">⌨️ 改成打字</button>
+        <div class="text-input-wrap" id="textWrap">
+          <input id="textInput" type="text" placeholder="想对小伴说什么…" maxlength="60">
+          <button class="send" id="sendBtn">发送</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 时长到点遮罩（阶段4接入逻辑） -->
+  <div class="end-overlay" id="endOverlay">
+    <div class="panel">
+      <div class="ico">🌙</div>
+      <h3>今天先聊到这里啦</h3>
+      <p>该去睡觉喽，明天再找小伴玩～</p>
+      <div class="row" style="margin-top:18px;justify-content:center">
+        <a class="btn" href="story.html">听故事</a>
+        <a class="btn ghost" href="index.html">明天见</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/safety.js"></script>
+  <script src="js/mock-ai.js"></script>
+  <script src="js/real-ai.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>

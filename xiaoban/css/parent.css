@@ -1,0 +1,94 @@
+/* ============================================================
+   小伴同学 · 家长端样式
+   说明：清爽 / 信息清晰 / 卡片式数据 / 简洁图表
+   阶段4 扩充完整样式，本文件先放占位与基础。
+   ============================================================ */
+
+.ph { padding: 16px 0 32px; }
+
+.p-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-soft);
+  margin: 18px 2px 10px;
+  letter-spacing: 0.5px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (min-width: 560px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.stat {
+  background: var(--card);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  text-align: center;
+}
+.stat .num { font-size: 24px; font-weight: 800; color: var(--role-color); font-variant-numeric: tabular-nums; }
+.stat .lbl { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
+
+.emo-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.emo-bar-row .lbl { width: 44px; font-size: 14px; }
+.emo-bar-row .track { flex: 1; height: 12px; background: var(--bg-soft); border-radius: var(--r-pill); overflow: hidden; }
+.emo-bar-row .fill { height: 100%; border-radius: var(--r-pill); background: var(--role-color); transition: width 0.4s ease; }
+.emo-bar-row .cnt { width: 24px; text-align: right; font-size: 13px; color: var(--text-soft); font-variant-numeric: tabular-nums; }
+
+.safety-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.safety-item:last-child { border-bottom: none; }
+.safety-item .dot { color: var(--danger); font-size: 16px; }
+.safety-item .body { flex: 1; }
+.safety-item .body .t { font-size: 14px; }
+.safety-item .body .m { font-size: 12px; color: var(--text-faint); margin-top: 2px; }
+.safety-item.resolved .dot { color: var(--safe); }
+.safety-item .actions { display: flex; gap: 8px; }
+.safety-item .actions button { font-size: 12px; padding: 4px 10px; border-radius: var(--r-pill); background: var(--bg-soft); }
+
+.suggest-item {
+  padding: 10px 14px;
+  background: var(--bg-soft);
+  border-radius: var(--r-md);
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.settings-field { margin-bottom: 18px; }
+.settings-field > label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.settings-field input[type=text],
+.settings-field input[type=number],
+.settings-field select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  border: 2px solid var(--line);
+  background: var(--card);
+  font-size: 15px;
+  outline: none;
+}
+.settings-field input:focus { border-color: var(--role-color); }
+.chip-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: var(--bg-soft);
+  font-size: 13px;
+}
+.chip .x { color: var(--text-faint); cursor: pointer; }

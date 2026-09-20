@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>小伴同学 · 家长端</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/parent.css">
+</head>
+<body>
+  <div class="wrap">
+    <!-- 顶部栏 -->
+    <div class="topbar">
+      <div class="brand"><span class="logo">🧸</span>小伴 · 家长端</div>
+      <a class="link" href="parent-settings.html">设置 ⚙️</a>
+    </div>
+
+    <div class="ph">
+      <!-- 今日情绪关键词 -->
+      <div class="p-section-title">今日情绪关键词</div>
+      <div class="card" id="emoBox">加载中…</div>
+
+      <!-- 对话摘要 -->
+      <div class="p-section-title">对话摘要</div>
+      <div class="card" id="summaryBox">加载中…</div>
+
+      <!-- 建议话题 -->
+      <div class="p-section-title">建议话题 · 今晚可以问孩子</div>
+      <div class="card" id="suggestBox">加载中…</div>
+
+      <!-- 安全记录 -->
+      <div class="p-section-title">安全记录</div>
+      <div class="card" id="safetyBox">加载中…</div>
+
+      <!-- 使用数据 -->
+      <div class="p-section-title">使用数据</div>
+      <div class="stat-grid" id="usageBox"></div>
+
+      <div class="row" style="margin-top:24px;justify-content:center">
+        <a class="btn ghost" href="index.html">← 返回儿童端</a>
+      </div>
+      <div class="muted center mt-16 faint" style="font-size:12px;padding-bottom:20px">
+        数据仅存于本机浏览器，不会上传。可在"设置"中清除。
+      </div>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/safety.js"></script>
+  <script src="js/mock-ai.js"></script>
+  <script src="js/parent.js"></script>
+</body>
+</html>

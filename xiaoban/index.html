@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>小伴同学 · 选一个伙伴</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/child.css">
+</head>
+<body>
+  <div class="wrap">
+    <!-- 顶部栏 -->
+    <div class="topbar">
+      <div class="brand"><span class="logo">🧸</span>小伴同学</div>
+      <a class="link" href="parent.html">家长入口 👨‍👩‍👧</a>
+    </div>
+
+    <!-- 标题 -->
+    <div class="role-hero">
+      <h1>今天想和谁聊天呀？</h1>
+      <p>选一个小伙伴，开始今天的故事 ✨</p>
+    </div>
+
+    <!-- 角色卡片 -->
+    <div class="role-grid" id="roleGrid"></div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script>
+    // 渲染三个角色卡片
+    function renderRoles() {
+      const grid = document.getElementById('roleGrid');
+      const cur = getCurrentRole();
+      grid.innerHTML = ROLE_LIST.map(r => `
+        <div class="role-card${r.id === cur.id ? ' selected' : ''}"
+             style="--rc:${r.color};--rc-soft:${r.colorSoft}"
+             data-role="${r.id}">
+          <div class="badge">${r.emoji}</div>
+          <h3>${r.name}</h3>
+          <div class="tagline">${r.tagline}</div>
+          <div class="go">和 ${r.name} 聊天 →</div>
+        </div>
+      `).join('');
+
+      // 点击选择角色并跳转对话页
+      grid.querySelectorAll('.role-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = card.getAttribute('data-role');
+          setCurrentRole(id);                       // 写入当前角色
+          const r = ROLES[id];
+          document.documentElement.style.setProperty('--role-color', r.color);
+          document.documentElement.style.setProperty('--role-color-soft', r.colorSoft);
+          setTimeout(() => { location.href = 'chat.html'; }, 120);
+        });
+      });
+    }
+
+    initPage();
+    renderRoles();
+  </script>
+</body>
+</html>

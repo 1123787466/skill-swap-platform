@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>小伴同学 · 设置</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/parent.css">
+  <link rel="stylesheet" href="css/child.css">
+</head>
+<body>
+  <div class="wrap">
+    <!-- 顶部栏 -->
+    <div class="topbar">
+      <div class="brand"><span class="logo">🧸</span>小伴 · 设置</div>
+      <a class="link" href="parent.html">← 返回</a>
+    </div>
+
+    <div class="ph" style="padding-bottom:90px">
+      <!-- 孩子档案 -->
+      <div class="p-section-title">孩子档案（仅本地，不收集真实隐私）</div>
+      <div class="card">
+        <div class="settings-field">
+          <label>昵称</label>
+          <input type="text" id="childName" placeholder="如：朵朵" maxlength="8">
+        </div>
+        <div class="settings-field">
+          <label>年龄段</label>
+          <select id="childAge">
+            <option value="3-4岁">3-4岁</option>
+            <option value="4-5岁">4-5岁</option>
+            <option value="5-6岁">5-6岁</option>
+            <option value="3-6岁">3-6岁</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 角色人格 -->
+      <div class="p-section-title">角色人格</div>
+      <div class="card">
+        <div class="role-grid" id="roleGrid" style="padding:0"></div>
+        <div class="settings-field" style="margin-top:16px;margin-bottom:0">
+          <label>口吻</label>
+          <select id="toneMode">
+            <option value="lively">活泼</option>
+            <option value="calm">安静</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 使用时长 -->
+      <div class="p-section-title">使用时长（单次对话）</div>
+      <div class="card">
+        <div class="settings-field" style="margin-bottom:0">
+          <select id="timeLimit">
+            <option value="10">10 分钟</option>
+            <option value="15">15 分钟</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 敏感词管理 -->
+      <div class="p-section-title">敏感词管理</div>
+      <div class="card">
+        <div class="chip-list" id="chipList"></div>
+        <div class="row" style="margin-top:12px">
+          <input type="text" id="newWord" placeholder="添加敏感词" maxlength="10" style="flex:1;padding:10px 14px;border-radius:12px;border:2px solid var(--line);background:var(--card);font-size:14px">
+          <button class="btn soft" id="addWordBtn" style="padding:10px 18px">添加</button>
+        </div>
+        <div class="muted mt-8" style="font-size:12px">命中敏感词会立即引导孩子找家长并写入安全记录。</div>
+      </div>
+
+      <!-- AI 设置 -->
+      <div class="p-section-title">AI 设置（可选）</div>
+      <div class="card">
+        <div class="settings-field">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+            <input type="checkbox" id="aiEnabled" style="width:18px;height:18px">
+            <span>启用真实 AI（需自备 Key，默认用 Mock）</span>
+          </label>
+        </div>
+        <div class="settings-field">
+          <label>API Key（仅本地存储）</label>
+          <input type="text" id="aiKey" placeholder="sk-..." autocomplete="off">
+        </div>
+        <div class="settings-field">
+          <label>接口地址（OpenAI 兼容）</label>
+          <input type="text" id="aiBaseUrl" placeholder="https://api.openai.com/v1">
+        </div>
+        <div class="settings-field">
+          <label>模型</label>
+          <input type="text" id="aiModel" placeholder="gpt-4o-mini">
+        </div>
+        <div class="safety-banner" style="background:#fff4e6;color:#a6631a">
+          <span class="ico">⚠️</span>
+          <span>前端存 Key 有泄露风险，仅供自测，请勿使用生产密钥。关掉后会回落 Mock 保证演示。</span>
+        </div>
+      </div>
+
+      <!-- 数据管理 -->
+      <div class="p-section-title">数据管理</div>
+      <div class="card">
+        <button class="btn ghost block" id="clearBtn">🗑️ 清空所有对话与记录</button>
+        <div class="muted mt-8" style="font-size:12px">清空后重新生成种子数据，不影响设置。</div>
+      </div>
+    </div>
+
+    <!-- 保存按钮 -->
+    <div style="position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--bg) 70%,transparent);z-index:20">
+      <div class="wrap" style="padding:0">
+        <button class="btn block" id="saveBtn">💾 保存设置</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/parent-settings.js"></script>
+</body>
+</html>
