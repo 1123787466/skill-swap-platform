@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="王佳琦个人产品作品集：今天穿什么、会议纪要助手、数据分析助手、AIGC儿歌视频">
+<title>王佳琦 · 个人作品集</title>
+<style>
+  :root{
+    --bg:#f6fbf8;
+    --ink:#253d33;
+    --ink-soft:#5d7a6d;
+    --green:#2fbf8f;
+    --green-deep:#159c72;
+    --mint:#e3f6ee;
+    --card:#ffffff;
+    --line:#e2efe8;
+    --pink:#ff8a7a;
+    --pink-bg:#fff3ef;
+    --blue:#4f8dfd;
+    --blue-bg:#eef4ff;
+    --teal:#18b5b0;
+    --teal-bg:#e8f9f8;
+    --yellow:#f7b32b;
+    --yellow-bg:#fff8e8;
+    --radius:20px;
+    --shadow:0 8px 30px rgba(37,94,71,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{overflow-x:hidden;
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---------- 顶部导航 ---------- */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(246,251,248,.85);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700}
+  .logo-dot{width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,var(--green),#7bd8ff);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+  .nav-links{display:flex;gap:26px;font-size:15px;color:var(--ink-soft)}
+  .nav-links a{transition:color .2s}
+  .nav-links a:hover{color:var(--green-deep)}
+  @media (max-width:720px){.nav-links{display:none}}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    background:linear-gradient(160deg,#e9f9f0 0%,#f2fbf7 45%,#e8f4ff 100%);
+  }
+  .hero .blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.55}
+  .blob-1{width:220px;height:220px;background:#c9f0dd;top:-60px;right:-40px}
+  .blob-2{width:130px;height:130px;background:#d9ecff;bottom:30px;left:6%}
+  .blob-3{width:70px;height:70px;background:#ffe9d6;top:70px;left:20%}
+  .hero-inner{position:relative;padding:96px 0 88px;text-align:center}
+  .hero-kicker{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);
+    padding:6px 16px;border-radius:999px;font-size:14px;color:var(--green-deep);box-shadow:var(--shadow)}
+  .hero h1{font-size:clamp(32px,6vw,52px);letter-spacing:2px;margin:22px 0 6px;overflow-wrap:anywhere}
+  .hero h1 .en{display:block;font-size:15px;font-weight:400;letter-spacing:clamp(2px,1vw,8px);color:var(--ink-soft);margin-top:10px}
+  .hero-meta{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:22px 0}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 18px;font-size:14px;color:var(--ink-soft)}
+  .hero-desc{max-width:640px;margin:0 auto;color:var(--ink-soft);font-size:17px}
+  .hero-cta{display:flex;justify-content:center;gap:16px;margin-top:34px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 30px;border-radius:999px;font-size:15px;
+    transition:transform .2s,box-shadow .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:linear-gradient(135deg,var(--green),var(--green-deep));color:#fff;box-shadow:0 8px 20px rgba(47,191,143,.35)}
+  .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+  .hero-stats{display:flex;justify-content:center;gap:40px;margin-top:56px;flex-wrap:wrap}
+  .stat b{font-size:26px;color:var(--green-deep)}
+  .stat span{display:block;font-size:13px;color:var(--ink-soft)}
+  @media (max-width:720px){.hero h1{font-size:36px}.hero-inner{padding:64px 0 60px}}
+
+  /* ---------- 通用 section ---------- */
+  section{padding:88px 0}
+  .sec-head{text-align:center;margin-bottom:52px}
+  .sec-tag{display:inline-block;font-size:13px;letter-spacing:4px;color:var(--green-deep);font-weight:600}
+  .sec-head h2{font-size:32px;margin-top:8px}
+  .sec-head p{color:var(--ink-soft);margin-top:10px}
+
+  /* ---------- 关于我 ---------- */
+  .about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
+  @media (max-width:860px){.about-grid{grid-template-columns:1fr}}
+  .about-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:36px;box-shadow:var(--shadow)}
+  .about-card h3{font-size:20px;margin-bottom:12px}
+  .about-card p{color:var(--ink-soft)}
+  .skill-list{display:flex;flex-wrap:wrap;gap:12px}
+  .skill{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 18px;font-size:14px;display:flex;align-items:center;gap:8px;transition:transform .2s,box-shadow .2s}
+  .skill:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .skill i{font-style:normal;font-size:17px}
+
+  /* ---------- 项目区块 ---------- */
+  .project{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:48px;margin-bottom:56px;box-shadow:var(--shadow)}
+  @media (max-width:720px){.project{padding:28px}}
+  .p-head{display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap}
+  .p-num{flex-shrink:0;width:54px;height:54px;border-radius:16px;color:#fff;font-weight:700;font-size:20px;
+    display:flex;align-items:center;justify-content:center}
+  .p-title h3{font-size:24px}
+  .p-title .sub{color:var(--ink-soft);font-size:14px;margin-top:2px}
+  .p-tags{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+  .p-tag{font-size:12px;padding:4px 12px;border-radius:999px}
+  .pain{margin:26px 0;border-radius:16px;padding:18px 22px;font-size:15px}
+  .pain b{display:block;margin-bottom:4px;font-size:15px}
+  .feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin:26px 0}
+  @media (max-width:860px){.feat-grid{grid-template-columns:1fr}}
+  .feat{background:var(--bg);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:transform .25s,box-shadow .25s}
+  .feat:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .feat .shot{border-bottom:1px solid var(--line);background:#fff}
+  .feat .shot img{width:100%;height:210px;object-fit:cover;object-position:left top}
+  .feat .txt{padding:16px 18px}
+  .feat .txt b{font-size:15px}
+  .feat .txt p{font-size:13px;color:var(--ink-soft);margin-top:4px}
+  .result-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 24px;margin:22px 0}
+  .result-list li{font-size:14px;color:var(--ink-soft);padding-left:26px;position:relative}
+  .result-list li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+  .value-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+  @media (max-width:720px){.value-cards{grid-template-columns:1fr}}
+  .v-card{border-radius:14px;padding:18px}
+  .v-card b{font-size:15px}
+  .v-card p{font-size:13px;color:var(--ink-soft);margin-top:4px}
+  .metric-row{display:flex;gap:16px;flex-wrap:wrap;margin:24px 0}
+  .metric{flex:1;min-width:150px;border-radius:16px;text-align:center;padding:20px 12px;background:var(--blue-bg)}
+  .metric b{font-size:26px;color:var(--blue)}
+  .metric span{display:block;font-size:13px;color:var(--ink-soft);margin-top:4px}
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:26px 0}
+  @media (max-width:860px){.flow{grid-template-columns:repeat(2,1fr)}}
+  .step{background:var(--blue-bg);border-radius:14px;padding:14px 10px;text-align:center;font-size:13px;position:relative}
+  .step i{display:block;font-style:normal;font-size:20px;margin-bottom:6px}
+  .shots-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+  @media (max-width:860px){.shots-2{grid-template-columns:1fr}}
+  .shot-card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+  .shot-card img{width:100%}
+  .shot-card figcaption{font-size:12px;color:var(--ink-soft);text-align:center;padding:8px;background:var(--bg)}
+  .link-btn{margin-top:24px}
+  /* 项目配色 */
+  .p-wear .p-num{background:linear-gradient(135deg,#ffb199,#ff8a7a)}
+  .p-wear .pain{background:var(--pink-bg)}
+  .p-wear .p-tag{background:var(--pink-bg);color:#e0644f}
+  .p-wear .v-card{background:var(--pink-bg)}
+  .p-meet .p-num{background:linear-gradient(135deg,#7fb0ff,#4f8dfd)}
+  .p-meet .pain{background:var(--blue-bg)}
+  .p-meet .p-tag{background:var(--blue-bg);color:#3a70d8}
+  .p-data .p-num{background:linear-gradient(135deg,#5fd6d1,#18b5b0)}
+  .p-data .pain{background:var(--teal-bg)}
+  .p-data .p-tag{background:var(--teal-bg);color:#0f8c88}
+  .p-data .metric{background:var(--teal-bg)}
+  .p-data .metric b{color:var(--teal)}
+
+  /* ---------- AIGC 儿歌 ---------- */
+  .song-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media (max-width:860px){.song-grid{grid-template-columns:repeat(2,1fr)}}
+  .song{border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .25s,box-shadow .25s}
+  .song:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .song img{aspect-ratio:1;object-fit:cover;width:100%}
+  .song figcaption{font-size:13px;text-align:center;padding:10px;color:var(--ink-soft)}
+  .song-note{display:inline-flex;align-items:center;gap:8px;background:var(--yellow-bg);color:#b07708;
+    border-radius:999px;padding:8px 20px;font-size:14px;margin-bottom:34px}
+
+  /* ---------- 页脚 ---------- */
+  footer{background:linear-gradient(160deg,#e9f9f0,#e8f4ff);text-align:center;padding:80px 24px 48px;margin-top:40px}
+  footer h2{font-size:34px;letter-spacing:6px}
+  footer .en{letter-spacing:8px;color:var(--ink-soft);font-size:13px;margin-top:10px}
+  footer .meta{margin-top:26px;color:var(--ink-soft);font-size:14px}
+  footer .copy{margin-top:40px;font-size:12px;color:#9ab3a7}
+
+  /* ---------- 滚动浮现 ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- 导航 -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="logo" href="#top"><span class="logo-dot">琦</span>王佳琦 · 作品集</a>
+    <nav class="nav-links" aria-label="站内导航">
+      <a href="#about">关于我</a>
+      <a href="#project-wear">今天穿什么</a>
+      <a href="#project-meet">会议纪要助手</a>
+      <a href="#project-data">数据分析助手</a>
+      <a href="#aigc">AIGC 儿歌</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero" id="top">
+  <span class="blob blob-1" aria-hidden="true"></span>
+  <span class="blob blob-2" aria-hidden="true"></span>
+  <span class="blob blob-3" aria-hidden="true"></span>
+  <div class="wrap hero-inner">
+    <span class="hero-kicker">🌱 PORTFOLIO · 个人作品集</span>
+    <h1>你好，我是王佳琦
+      <span class="en">GRADUATION PORTFOLIO</span>
+    </h1>
+    <div class="hero-meta">
+      <span class="chip">🎓 湖南工业大学</span>
+      <span class="chip">💡 信息工程 · 27 届</span>
+      <span class="chip">🧩 产品设计 / AI 智能体</span>
+    </div>
+    <p class="hero-desc">打过比赛拿过国奖，会搭智能体、会用 Cursor、Trae，懂技术更懂用户，想用 AI 产品帮更多人解决问题。</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#project-wear">查看我的项目 ↓</a>
+      <a class="btn btn-ghost" href="https://1123787466.github.io/today-wear-web" target="_blank" rel="noopener">「今天穿什么」在线演示 ↗</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b>3</b><span>完整产品项目</span></div>
+      <div class="stat"><b>2</b><span>自制 AI 智能体</span></div>
+      <div class="stat"><b>92%</b><span>待办识别准确率</span></div>
+      <div class="stat"><b>🏆</b><span>国家级奖项</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 关于我 -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">ABOUT ME</span>
+      <h2>关于我</h2>
+      <p>懂技术，更懂用户</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-card reveal">
+        <h3>👋 个人基本信息</h3>
+        <p><b>姓名：</b>王佳琦　　<b>学校：</b>湖南工业大学　　<b>专业：</b>信息工程（27 届）</p>
+        <p style="margin-top:12px">学习与适应能力强，从需求洞察、原型设计到智能体搭建与上线，都能独立完成闭环。相信好的产品是把复杂的技术，变成用户顺手的工具。</p>
+      </div>
+      <div class="reveal">
+        <div class="skill-list">
+          <span class="skill"><i>🤖</i>AI 智能体搭建</span>
+          <span class="skill"><i>🔀</i>工作流编排</span>
+          <span class="skill"><i>✏️</i>Cursor / Trae</span>
+          <span class="skill"><i>📱</i>App 原型设计</span>
+          <span class="skill"><i>🧠</i>用户研究</span>
+          <span class="skill"><i>📊</i>数据分析</span>
+          <span class="skill"><i>🎮</i>游戏化设计</span>
+          <span class="skill"><i>🎬</i>AIGC 内容制作</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 项目 1：今天穿什么 -->
+<section id="project-wear" style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">PROJECT 01</span>
+      <h2>「今天穿什么」</h2>
+      <p>游戏化衣柜记录 + 穿搭社区设计</p>
+    </div>
+    <div class="project p-wear reveal">
+      <div class="p-head">
+        <div class="p-num">01</div>
+        <div class="p-title">
+          <h3>衣柜管理 + 天气推荐 + 宠物陪伴 + 社区互动</h3>
+          <div class="sub">帮用户 "记得住、找得到、穿得对"</div>
+        </div>
+        <div class="p-tags">
+          <span class="p-tag">App 设计</span>
+          <span class="p-tag">游戏化</span>
+          <span class="p-tag">社区</span>
+        </div>
+      </div>
+      <div class="pain">
+        <b>🎯 用户痛点</b>
+        衣柜衣物杂乱，常忘记有什么衣服；每天出门纠结穿什么；天气变化不知如何搭配。
+      </div>
+      <div class="feat-grid">
+        <div class="feat">
+          <div class="shot"><img src="assets/onboarding.png" alt="新手引导流程：欢迎使用、添加衣物、智能搭配推荐、养一只宠物、分享穿搭五屏引导"></div>
+          <div class="txt"><b>✨ 新手引导流程</b><p>五屏轻引导，第一眼就讲清楚产品价值</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/home.png" alt="登录页与首页：今日穿搭推荐、换一套、打开衣橱"></div>
+          <div class="txt"><b>🌤️ 登录及首页</b><p>接入实时天气，根据温度、天气状况智能推荐合适穿搭方案</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/wardrobe.png" alt="智能衣橱：衣物入库、分类管理、自定义标签和备注"></div>
+          <div class="txt"><b>👕 智能衣橱</b><p>衣物入库、分类管理、自定义标签和备注</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/pet.png" alt="虚拟宠物：喂食、摸摸、玩耍、更换皮肤、快乐农场"></div>
+          <div class="txt"><b>🐶 虚拟宠物</b><p>四种宠物领养互动、皮肤更换、快乐农场小游戏，提升打开率和粘性</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/community.png" alt="社区互动：发布穿搭动态、点赞评论、关注好友、更换背景"></div>
+          <div class="txt"><b>💬 社区互动</b><p>发布穿搭动态、点赞评论、关注好友、查看关注对象动态、背景更换</p></div>
+        </div>
+        <div class="feat">
+          <div class="shot"><img src="assets/member.png" alt="个性化及会员系统：个人中心、会员套餐、金币奖励"></div>
+          <div class="txt"><b>👑 个性化及会员系统</b><p>头像昵称、数据管理、周卡/月卡、专属特权、充值管理</p></div>
+        </div>
+      </div>
+      <ul class="result-list">
+        <li>完整的智能穿搭助手应用</li>
+        <li>丰富的社区互动功能</li>
+        <li>创新的虚拟宠物系统</li>
+        <li>优秀的用户体验设计</li>
+        <li>现代化的技术架构</li>
+      </ul>
+      <div class="value-cards">
+        <div class="v-card"><b>解决痛点</b><p>帮助用户解决日常穿搭选择困难</p></div>
+        <div class="v-card"><b>社交价值</b><p>建立穿搭社区，分享时尚灵感</p></div>
+        <div class="v-card"><b>技术创新</b><p>现代化技术栈，优秀的代码质量</p></div>
+      </div>
+      <div class="link-btn">
+        <a class="btn btn-primary" href="https://1123787466.github.io/today-wear-web" target="_blank" rel="noopener">在线演示 ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 项目 2：会议纪要助手 -->
+<section id="project-meet" style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">PROJECT 02</span>
+      <h2>会议纪要助手</h2>
+      <p>语音转文字 + 智能分发 + 邮件推送智能体</p>
+    </div>
+    <div class="project p-meet reveal">
+      <div class="p-head">
+        <div class="p-num">02</div>
+        <div class="p-title">
+          <h3>一键上传录音，纪要自动送达各部门</h3>
+          <div class="sub">自制工作流 · 从录音到分发的全自动闭环</div>
+        </div>
+        <div class="p-tags">
+          <span class="p-tag">AI 智能体</span>
+          <span class="p-tag">工作流</span>
+          <span class="p-tag">自动化</span>
+        </div>
+      </div>
+      <div class="pain">
+        <b>🎯 用户痛点</b>
+        会议录音整理耗时，纪要格式不统一，待办事项容易遗漏，手动分发效率低。
+      </div>
+      <div class="flow">
+        <div class="step"><i>🎙️</i>上传会议录音</div>
+        <div class="step"><i>📝</i>自动转文字</div>
+        <div class="step"><i>🧠</i>AI 提炼要点 / 待办</div>
+        <div class="step"><i>🗂️</i>按部门生成专属纪要</div>
+        <div class="step"><i>📧</i>邮件自动发送</div>
+      </div>
+      <div class="metric-row">
+        <div class="metric"><b>≈92%</b><span>待办事项识别准确率</span></div>
+        <div class="metric"><b>3–5 个</b><span>部门自动分组发送</span></div>
+        <div class="metric"><b>1 键</b><span>上传即可全流程执行</span></div>
+      </div>
+      <div class="shots-2">
+        <figure class="shot-card">
+          <img src="assets/flow-meeting.jpeg" alt="会议纪要助手工作流：语音转文字、会议要点分析、各部门数据、邮件发送节点">
+          <figcaption>自制工作流全景：录音转写 → 要点分析 → 分部门数据 → 邮件发送</figcaption>
+        </figure>
+        <figure class="shot-card">
+          <img src="assets/test-meeting.png" alt="测试结果：上传音频后自动生成会议纪要并按部门分发邮件">
+          <figcaption>测试结果：上传音频 → 生成纪要 → 自动分发至各部门邮箱</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 项目 3：数据分析助手 -->
+<section id="project-data" style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">PROJECT 03</span>
+      <h2>数据分析助手</h2>
+      <p>自动化数据洞察与可视化报告生成智能体</p>
+    </div>
+    <div class="project p-data reveal">
+      <div class="p-head">
+        <div class="p-num">03</div>
+        <div class="p-title">
+          <h3>上传表格，对话间生成可视化报告</h3>
+          <div class="sub">对话式数据分析 AI · 可分享的网页报告</div>
+        </div>
+        <div class="p-tags">
+          <span class="p-tag">AI 智能体</span>
+          <span class="p-tag">数据可视化</span>
+          <span class="p-tag">报告生成</span>
+        </div>
+      </div>
+      <div class="pain">
+        <b>🎯 用户痛点</b>
+        非技术用户拿到 Excel 数据后不知如何分析，图表制作繁琐，报告撰写耗时。
+      </div>
+      <div class="metric-row">
+        <div class="metric"><b>1 步</b><span>上传 Excel 即可开始分析</span></div>
+        <div class="metric"><b>图表 + 报告</b><span>自动生成可视化图表与结构化报告</span></div>
+        <div class="metric"><b>🔗 可分享</b><span>一键生成可分享的网页链接</span></div>
+      </div>
+      <div class="shots-2">
+        <figure class="shot-card">
+          <img src="assets/flow-data.jpeg" alt="数据分析助手工作流：获取数据、获取实时时间、数据分析智能体、生成 Html 节点">
+          <figcaption>自制工作流：读取表格 → 智能分析 → 生成 HTML 报告</figcaption>
+        </figure>
+        <figure class="shot-card">
+          <img src="assets/chat-data.jpeg" alt="数据分析小助手对话测试：上传 6 月每日销售成交汇总表格后返回报告链接">
+          <figcaption>对话测试：上传 Excel，助手返回可点击的报告链接</figcaption>
+        </figure>
+        <figure class="shot-card">
+          <img src="assets/report-data.png" alt="自动生成的 2026 年 6 月销售数据分析报告，含关键指标、图表与建议结论">
+          <figcaption>生成报告示例：关键指标 + 多维图表 + 趋势分析与建议</figcaption>
+        </figure>
+        <figure class="shot-card">
+          <img src="assets/agent-data.jpeg" alt="数据分析小助手智能体卡片">
+          <figcaption>智能体卡片：数据分析小助手</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AIGC 儿歌视频 -->
+<section id="aigc" style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">PROJECT 04</span>
+      <h2>AIGC 儿歌视频</h2>
+      <p>用 AI 生产的英语启蒙儿歌动画</p>
+    </div>
+    <div class="reveal" style="text-align:center">
+      <span class="song-note">🎵 目标用户：3–8 岁英语启蒙儿童</span>
+    </div>
+    <div class="song-grid reveal">
+      <figure class="song"><img src="assets/song-pizza.png" alt="儿歌视频封面：白雪公主与小王子一起做披萨"><figcaption>儿歌视频 · 美食篇</figcaption></figure>
+      <figure class="song"><img src="assets/song-jam.png" alt="儿歌视频封面：Jam 果酱主题英语儿歌"><figcaption>儿歌视频 · Jam</figcaption></figure>
+      <figure class="song"><img src="assets/song-red.png" alt="儿歌视频封面：Red 颜色主题英语儿歌"><figcaption>儿歌视频 · Red</figcaption></figure>
+      <figure class="song"><img src="assets/song-night.png" alt="儿歌视频封面：星空夜灯小王子场景"><figcaption>儿歌视频 · 夜灯篇</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+  <h2>谢谢观看</h2>
+  <div class="en">THANKS FOR WATCHING</div>
+  <div class="meta">
+    湖南工业大学 · 王佳琦 · 信息工程（27 届）<br>
+    期待与你一起，用 AI 产品帮更多人解决问题。
+  </div>
+  <div class="copy">© 2026 王佳琦 · Personal Portfolio</div>
+</footer>
+
+<script>
+  // 滚动浮现动画
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
