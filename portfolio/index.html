@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -164,10 +164,19 @@
   /* ---------- AIGC 儿歌 ---------- */
   .song-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
   @media (max-width:860px){.song-grid{grid-template-columns:repeat(2,1fr)}}
-  .song{border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .25s,box-shadow .25s}
+  .song{border-radius:16px;overflow:hidden;background:#fff;border:1px solid var(--line);transition:transform .25s,box-shadow .25s;position:relative;cursor:pointer}
   .song:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
   .song img{aspect-ratio:1;object-fit:cover;width:100%}
   .song figcaption{font-size:13px;text-align:center;padding:10px;color:var(--ink-soft)}
+  .song .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s}
+  .song .play-btn::before{content:'';width:0;height:0;border-left:18px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:4px}
+  .song:hover .play-btn{transform:translate(-50%,-50%) scale(1.12);background:rgba(0,0,0,.7)}
+  .video-modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:24px}
+  .video-modal.active{display:flex}
+  .video-modal .close{position:absolute;top:20px;right:28px;color:#fff;font-size:32px;cursor:pointer;line-height:1;z-index:2}
+  .video-modal .close:hover{color:var(--green)}
+  .video-modal video{max-width:900px;width:100%;border-radius:12px;outline:none}
+  .video-modal .modal-cap{color:#ccc;font-size:14px;text-align:center;margin-top:12px}
   .song-note{display:inline-flex;align-items:center;gap:8px;background:var(--yellow-bg);color:#b07708;
     border-radius:999px;padding:8px 20px;font-size:14px;margin-bottom:34px}
 
@@ -217,7 +226,7 @@
     </div>
     <p class="hero-desc">打过比赛拿过国奖，会搭智能体、会用 Cursor、Trae，懂技术更懂用户，想用 AI 产品帮更多人解决问题。</p>
     <div class="hero-cta">
-      <a class="btn btn-primary" href="#project-wear">查看我的项目 ↓</a>
+      <a class="btn btn-primary" href="#project-swap">查看我的项目 ↓</a>
       <a class="btn btn-ghost" href="https://1123787466.github.io/today-wear-web" target="_blank" rel="noopener">「今天穿什么」在线演示 ↗</a>
     </div>
     <div class="hero-stats">
@@ -517,13 +526,20 @@
       <span class="song-note">🎵 目标用户：3–8 岁英语启蒙儿童</span>
     </div>
     <div class="song-grid reveal">
-      <figure class="song"><img src="assets/song-pizza.png" alt="儿歌视频封面：白雪公主与小王子一起做披萨"><figcaption>儿歌视频 · 美食篇</figcaption></figure>
-      <figure class="song"><img src="assets/song-jam.png" alt="儿歌视频封面：Jam 果酱主题英语儿歌"><figcaption>儿歌视频 · Jam</figcaption></figure>
-      <figure class="song"><img src="assets/song-red.png" alt="儿歌视频封面：Red 颜色主题英语儿歌"><figcaption>儿歌视频 · Red</figcaption></figure>
-      <figure class="song"><img src="assets/song-night.png" alt="儿歌视频封面：星空夜灯小王子场景"><figcaption>儿歌视频 · 夜灯篇</figcaption></figure>
+      <figure class="song" data-video="https://github.com/1123787466/skill-swap-platform/releases/download/portfolio-videos/video1.mp4"><span class="play-btn"></span><img src="assets/song-pizza.png" alt="儿歌视频封面：白雪公主与小王子一起做披萨"><figcaption>儿歌视频 · 美食篇</figcaption></figure>
+      <figure class="song" data-video="https://github.com/1123787466/skill-swap-platform/releases/download/portfolio-videos/video2.mp4"><span class="play-btn"></span><img src="assets/song-jam.png" alt="儿歌视频封面：Jam 果酱主题英语儿歌"><figcaption>儿歌视频 · Jam</figcaption></figure>
+      <figure class="song" data-video="https://github.com/1123787466/skill-swap-platform/releases/download/portfolio-videos/video3.mp4"><span class="play-btn"></span><img src="assets/song-red.png" alt="儿歌视频封面：Red 颜色主题英语儿歌"><figcaption>儿歌视频 · Red</figcaption></figure>
+      <figure class="song" data-video="https://github.com/1123787466/skill-swap-platform/releases/download/portfolio-videos/video4.mp4"><span class="play-btn"></span><img src="assets/song-night.png" alt="儿歌视频封面：星空夜灯小王子场景"><figcaption>儿歌视频 · 夜灯篇</figcaption></figure>
     </div>
   </div>
 </section>
+
+<!-- 视频弹窗 -->
+<div class="video-modal" id="videoModal">
+  <span class="close" id="videoClose">&times;</span>
+  <video id="videoPlayer" controls playsinline></video>
+  <p class="modal-cap" id="videoCap"></p>
+</div>
 
 <!-- 页脚 -->
 <footer>
@@ -542,6 +558,23 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // 视频弹窗
+  const modal = document.getElementById('videoModal');
+  const player = document.getElementById('videoPlayer');
+  const cap = document.getElementById('videoCap');
+  document.querySelectorAll('.song[data-video]').forEach(el => {
+    el.addEventListener('click', () => {
+      player.src = el.dataset.video;
+      cap.textContent = el.querySelector('figcaption').textContent;
+      modal.classList.add('active');
+      player.play();
+    });
+  });
+  function closeVideo(){ modal.classList.remove('active'); player.pause(); player.src = ''; }
+  document.getElementById('videoClose').addEventListener('click', closeVideo);
+  modal.addEventListener('click', e => { if (e.target === modal) closeVideo(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVideo(); });
 </script>
 </body>
 </html>
